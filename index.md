@@ -14,5 +14,4 @@ Sky Port project consists of the following code repositories:
 
 The following schema shows relationships among the Sky Port components.
 
-[schema]: ./images/skyport_schema.png
-{:height="581px" width="233px"}
+![schema](./images/skyport_schema.png){:height="581px" width="233px"}
