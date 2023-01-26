@@ -11,3 +11,6 @@ Sky Port project consists of the following code repositories:
 * [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term): JupyterHub spawner to run Jupyter servers via Sky Port. 
 * [Console terminal](https://github.com/openworkload/swm-console-term): console program that uses Sky Port python clinet libary to work with Sky Port workload and resources.
 * [Python client library](https://github.com/openworkload/swm-python-client): wrapper around client REST API of the core component.
+
+The following schema shows relationships among the Sky Port components:
+![schema](./images/skyport_schema.png)
