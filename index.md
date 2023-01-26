@@ -12,5 +12,7 @@ Sky Port project consists of the following code repositories:
 * [Console terminal](https://github.com/openworkload/swm-console-term): console program that uses Sky Port python clinet libary to work with Sky Port workload and resources.
 * [Python client library](https://github.com/openworkload/swm-python-client): wrapper around client REST API of the core component.
 
-The following schema shows relationships among the Sky Port components:
-![schema](./images/skyport_schema.png)
+The following schema shows relationships among the Sky Port components.
+
+[schema]: ./images/skyport_schema.png
+{:height="581px" width="233px"}
