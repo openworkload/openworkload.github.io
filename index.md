@@ -5,9 +5,9 @@ In other words we try to work through and sharpen a universal bus between user s
 We believe in zero trust approach and follow its principles in our experiments. We also use a shared copyright model that enables all contributors to maintain the copyright on their contributions. All the software we develop is licensed under the BSD-3-Clause license.
 
 Sky Port project consists of the following code repositories:
-* Core daemon: https://github.com/openworkload/swm-core
-* Scheduler: https://github.com/openworkload/swm-sched
-* Cloud gate: https://github.com/openworkload/swm-cloud-gate
-* Jupyter terminal: https://github.com/openworkload/swm-jupyter-term
-* Console terminal: https://github.com/openworkload/swm-console-term
-* Python client library: https://github.com/openworkload/swm-python-client
+* [Core daemon](https://github.com/openworkload/swm-core)
+* [Scheduler](https://github.com/openworkload/swm-sched)
+* [Cloud gate](https://github.com/openworkload/swm-cloud-gate)
+* [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term)
+* [Console terminal](https://github.com/openworkload/swm-console-term)
+* [Python client library](https://github.com/openworkload/swm-python-client)
