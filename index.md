@@ -8,15 +8,15 @@ We believe in zero trust approach and follow its principles in our source code.
 
 ## Current status
 
-The source code of Sky Port can be considered as a reference and a prove of concept for a future standard. The project is started recently and requires some time for the API stabilization. Thus one can consider the code for now as a highly experimental one.
+The [source code](https://github.com/openworkload) of can be considered as a reference and a prove of concept for a future standard. The project is started recently and requires some time for the API stabilization. Thus one can consider the code for now as a highly experimental one.
 
 ## Source code
 
-Sky Port project consists of the following repositories:
-* [Core daemon](https://github.com/openworkload/swm-core): the core component of Sky Port. This is a daemon that runs in background and serve all communications among terminals and gates.
-* [Scheduler](https://github.com/openworkload/swm-sched): workload scheduler for the core daemon.
-* [Cloud gate](https://github.com/openworkload/swm-cloud-gate): a cloud plugin for Sky Port that is in charge of all communications with cloud providers.
-* [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term): JupyterHub spawner to run Jupyter servers via Sky Port. 
+Sky Port consists of the following repositories:
+* [Core](https://github.com/openworkload/swm-core): the main component of Sky Port (workload manager). This is a daemon that runs in a background and serves all communications among terminals and gates.
+* [Scheduler](https://github.com/openworkload/swm-sched): workload scheduler (a plugin for the core daemon). It creates timetables of the jobs execution.
+* [Gate](https://github.com/openworkload/swm-cloud-gate): a plugin for Sky Port that is in charge of all communications between the Core and cloud providers.
+* [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term): JupyterHub spawner that allows to submit Jupyter servers jobs to Sky Port. 
 * [Console terminal](https://github.com/openworkload/swm-console-term): console program that uses Sky Port python clinet libary to work with Sky Port workload and resources.
 * [Python client library](https://github.com/openworkload/swm-python-client): wrapper around client REST API of the core component.
 
