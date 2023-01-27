@@ -1,4 +1,4 @@
-## The project
+## Open Workload Project
 
 Open Workload is an effort initiated from desire to craft a standard for a modern High Performance Computing (HPC) workload management. Our project Sky Port is a prove of concept of tools that allows user facing software to have transparent access to multiple cloud compute resources with a single API.
 
