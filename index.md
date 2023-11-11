@@ -23,7 +23,7 @@ Sky Port targets support for the Linux operating system. A reasonable effort is 
 
 ## Current status
 
-The [source code](https://github.com/openworkload) can be considered a reference and a proof of concept for a future standard. The project started recently and requires some time for API stabilization. Thus one can consider the code for now as a highly experimental one.
+The [source code](https://github.com/openworkload) can be considered as a reference and a proof of concept for future standard. The project started recently and requires some time for API stabilization. Thus one can consider the code for now as a highly experimental one.
 
 ## Source code
 
@@ -45,4 +45,4 @@ The idea of such components separation is the following: APIs of a Core and a Ga
 
 We appreciate all your contributions. If you are planning to contribute back bug fixes, please do so without any further discussion. If you plan to contribute new features, Sky Port improvements, or new gates and terminals, please open an issue and discuss the feature with us.
 
-We use a shared copyright model that enables all contributors to maintain the copyright on their contributions. All the software we develop is licensed under the BSD-3-Clause license.
+We use a shared copyright model that enables all contributors to maintain the copyright on their contributions. All the software we develop is licensed under the BSD-3-Clause license. Our code of conduct can be found [here](https://github.com/openworkload/swm-core/blob/master/CODE_OF_CONDUCT.md).
