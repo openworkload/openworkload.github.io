@@ -1,8 +1,8 @@
 ## Open Workload Project
 
-Open Workload is an effort initiated by the desire to craft new possibilities for modern High Performance Computing (HPC). Our project Sky Port is a proof of concept of tools that allow user-facing software to have transparent access to multiple cloud computing resources via a single API. We call this Private HPC.
+Open Workload is an effort initiated by the desire to craft new possibilities for modern High Performance Computing (HPC). Our project Sky Port is a proof of concept of tools that allow user-facing software to have transparent access to multiple cloud computing resources via a single API. We call thus approach for the HPC resources management as Private HPC.
 
-We are software developers and experts in HPC who try to work through and sharpen a universal bus between user software and cloud resources. Sky Port is the method, while our final goal is to present a new standard that describes a transportation layer between a workload producer (user software) and multiple resource providers (cloud or HPC clusters).
+We are software developers and experts in HPC who try to work through and sharpen a universal bus that connects user software and cloud resources. Sky Port is the method, while our final goal is to present a new standard that describes a transportation layer that resides between a workload producer (user software) and multiple resource providers (cloud or HPC clusters).
 
 We believe in:
 * zero trust approach;
@@ -13,9 +13,9 @@ We believe in:
 
 A private HPC refers to a practice of automatically aggregating compute power for a workload of a user who has full control over its lifecycle. The user runs a workload management software that offloads the computationally intensive workload to a remote on-premises compute cluster or to compute resources of a cloud provider. The user solely decides what compute resources her job should run on (or allows the workload manager to choose) and pays for those resources. 
 
-The difference between the Private HPC and the usage of a manually configured HPC cluster in a public cloud is the level of workload and cluster management automation. The former allows a user or user-controlled software to submit a new workload to the private HPC management software without bothering about mechanisms behind the data transferring and the computational process. While the latter demands from the user additional knowledge and steps to create and configure an HPC cluster in the cloud, transmit the user’s data, run the workload, and download the workload results back to the user’s laptop. Those steps usually can be automated, but they are typically either not integrated into a single seamless user workflow or vendor locked. 
+The difference between the Private HPC and the usage of a manually configured HPC cluster in a public cloud is amount of workload and cluster management automation. The former allows a user or user-controlled software to submit a new workload to the private HPC management software without bothering about mechanisms behind the data transferring and the computational process. While the latter demands from the user additional knowledge and steps to create and configure an HPC cluster in the cloud, transmit the user’s data, run the workload, and download the workload results back to the user’s laptop. Those steps usually can be automated, but they are typically either not integrated into a single seamless user workflow or vendor locked. 
 
-Sky Port is an open-source vendor-independent workload manager summoned to show the power of Private HPC. We want to develop a new standard that simplifies the creation of seamlessly integrated components for Private HPC managers.
+Sky Port is an open-source vendor-independent workload manager designed to show the power of Private HPC. We want to develop a new standard that simplifies the creation of seamlessly integrated components for Private HPC managers.
 
 ## Supported platforms
 
