@@ -26,7 +26,7 @@ Sky Port targets support for the Linux operating system. A reasonable effort is 
 The [source code](https://github.com/openworkload) can be considered as a reference and a proof of concept for future standard. The project started recently and requires some time for API stabilization. Thus one can consider the code for now as a highly experimental one.
 
 The following video demostrates Sky Port functionality with JupyterHub spawner and Azure:
-<video controls>
+<video width="1280" controls>
   <source src="videos/jupyterhub.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
