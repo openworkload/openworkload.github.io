@@ -25,12 +25,6 @@ Sky Port targets support for the Linux operating system. A reasonable effort is 
 
 The [source code](https://github.com/openworkload) can be considered as a reference and a proof of concept for future standard. The project started recently and requires some time for API stabilization. Thus one can consider the code for now as a highly experimental one.
 
-The following video demostrates Sky Port functionality with JupyterHub spawner and Azure:
-<video width="1280" controls>
-  <source src="videos/jupyterhub.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
 ## Source code
 
 Sky Port consists of the following repositories:
@@ -41,11 +35,17 @@ Sky Port consists of the following repositories:
 * [Console terminal](https://github.com/openworkload/swm-console-term): console program that uses Sky Port python client library to work with Sky Port workload and resources.
 * [Python client library](https://github.com/openworkload/swm-python-client): wrapper around client REST API of the core component.
 
+## Sky Port design
+
 The following schema shows relationships among the Sky Port components.
 
 ![schema](./images/skyport_schema.png)
 
 The idea of such components separation is the following: APIs of a Core and a Gate are well described. Thus they can be replaced to be more suitable for a user's problem. Terminals can be created by 3rd party software developers for specific user needs, like submission of Jupyter servers jobs. Cloud provider owners can create gates for their compute resources and share them among their users.
+
+Connections between terminal, core, gate and cloud provider is shown on the following schema.
+
+![schema](./images/connections.png)
 
 ## Contributing
 
