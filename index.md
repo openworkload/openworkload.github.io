@@ -1,33 +1,35 @@
 ## Open Workload Project
 
-Open Workload is an effort initiated by the desire to craft new possibilities for modern [High Performance Computing (HPC)](https://en.wikipedia.org/wiki/High-performance_computing). Our mission is to connect HPC software to the global compute ecosystem. Our project Sky Port is a software stack that provides user software a transparent access to multiple cloud computing resources via a single API. We call thus approach for the HPC resources management as Private HPC.
+Open Workload is a dedicated initiative focused on exploring innovative approaches to modern [High Performance Computing (HPC)](https://en.wikipedia.org/wiki/High-performance_computing) workload management. Comprised of software developers and HPC specialists, our objective is to refine and establish a universal interface for seamless connection between user applications and cloud resources. Our project, Sky Port, serves as an experimental workload manager that enables users and their software to access and interact with the global compute ecosystem.
 
-We are software developers and experts in HPC who try to work through and sharpen a universal bus that connects user software and cloud resources. Sky Port is the method, while our final goal is to present a new standard that describes a transportation layer that resides between a workload producer (user software) and multiple resource providers (cloud or HPC clusters).
+We trust in:
+* zero trust security approach,
+* a diverse and distributed HPC future,
+* rising demand for personal HPC computation.
 
-We believe in:
-* zero trust approach;
-* highly heterogeneous and distributed future of HPC;
-* eventual growth of demand for Private HPC.
+Sky Port facilitates automated configuration of HPC clusters for each cloud-based job, providing users with comprehensive control over the entire lifecycle of their tasks. A workload management software allows the user to transfer demanding computational tasks to remote resources provided by a cloud service. The user selects which resources are used for her jobs and is responsible for covering the costs of those resources.
 
-## Private HPC
+The difference between using Sky Port and the usage of a manually configured HPC clusters in a public cloud is amount of workload and cluster management automation. The former allows a user or user-controlled software to submit a new workload without bothering about mechanisms behind the data transferring, remote resources lifecycle and computational process. While the latter demands from the user additional knowledge and steps to create and configure an HPC clusters in the cloud, configure ports forwarding, transmit the user’s data, run the workload, and download the workload results back to the user’s laptop. Those steps usually can be automated, but they are typically either not integrated into a single seamless user workflow, implemented as a proprietary software or vendor locked.
 
-A private HPC refers to a practice of automatically aggregating compute power for a workload of a user who has full control over its lifecycle. The user runs a workload management software that offloads the computationally intensive workload to a remote on-premises compute cluster or to compute resources of a cloud provider. The user solely decides what compute resources her job should run on (or allows the workload manager to choose) and pays for those resources.
+Sky Port is an open-source vendor-independent workload manager designed for HPC workload. In particular the following funcionality is going to be implemented:
 
-The difference between the Private HPC and the usage of a manually configured HPC cluster in a public cloud is amount of workload and cluster management automation. The former allows a user or user-controlled software to submit a new workload to the private HPC management software without bothering about mechanisms behind the data transferring and the computational process. While the latter demands from the user additional knowledge and steps to create and configure an HPC cluster in the cloud, transmit the user’s data, run the workload, and download the workload results back to the user’s laptop. Those steps usually can be automated, but they are typically either not integrated into a single seamless user workflow or vendor locked. 
-
-Sky Port is an open-source vendor-independent workload manager designed to show the power of Private HPC. We want to develop a new standard that simplifies the creation of seamlessly integrated components for Private HPC managers.
+* Multi node jobs
+* GPU jobs
+* MPI
+* OpenMP
+* Checkpoints
 
 ## Supported platforms
 
-Sky Port targets support for the Linux operating system. A reasonable effort is made to support all major, modern Linux distributions on ARM64 and X86_64 architectures; however, validation is limited to the most recent releases of Ubuntu/X86_64 systems.
+Sky Port targets support for the Linux operating system. A reasonable effort is made to support all major, modern Linux distributions on ARM64 and X86_64 architectures. However, validation is limited to the most recent releases of Ubuntu/X86_64 systems.
 
 ## Current status
 
-The [source code](https://github.com/openworkload) can be considered as a reference and a proof of concept for future standard. The project started recently and requires some time for API stabilization. Thus one can consider the code for now as a highly experimental one.
+The [source code](https://github.com/openworkload) is currently in early (alpha) stage. The project requires some time for API stabilization.
 
 ## Source code
 
-Sky Port consists of the following repositories:
+Sky Port software stack consists of the following repositories:
 * [Core](https://github.com/openworkload/swm-core): the main component of Sky Port (workload manager). This daemon runs in the background and serves all communications among terminals and gates.
 * [Scheduler](https://github.com/openworkload/swm-sched): workload scheduler (a plugin for the core daemon). It creates timetables for job execution.
 * [Gate](https://github.com/openworkload/swm-cloud-gate): a plugin for Sky Port that is in charge of all communications between the Core and cloud providers.
