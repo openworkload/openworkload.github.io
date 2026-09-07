@@ -1,56 +1,124 @@
-## Open Workload Project
+## Sky Port
 
-Open Workload is a dedicated initiative focused on exploring innovative approaches to modern [High Performance Computing (HPC)](https://en.wikipedia.org/wiki/High-performance_computing) workload management. Comprised of software developers and HPC specialists, our objective is to refine and establish a universal interface for seamless connection between user applications and cloud resources. Our project, Sky Port, serves as an experimental workload manager that enables users and their software to access and interact with the global compute ecosystem.
+**Sky Port** is an open-source, vendor-independent workload manager for [HPC](https://en.wikipedia.org/wiki/High-performance_computing). It connects user software to cloud compute: submit a job, and Sky Port provisions the cluster, configures port forwarding, moves data, runs containers, monitors progress, and tears resources down when the work is done.
 
-We trust in:
-* zero trust security approach,
-* a diverse and distributed HPC future,
-* rising demand for personal HPC computation.
+Open Workload is the community behind Sky Port.
 
-Sky Port facilitates automated configuration of HPC clusters for each cloud-based job, providing users with comprehensive control over the entire lifecycle of their tasks. A workload management software allows the user to transfer demanding computational tasks to remote resources provided by a cloud service. The user selects which resources are used for her jobs and is responsible for covering the costs of those resources.
+[Quick start](#quick-start) · [Try Jupyter](https://github.com/openworkload/swm-jupyter-term) · [Source on GitHub](https://github.com/openworkload)
 
-The difference between using Sky Port and the usage of a manually configured HPC clusters in a public cloud is amount of workload and cluster management automation. The former allows a user or user-controlled software to submit a new workload without bothering about mechanisms behind the data transferring, remote resources lifecycle and computational process. While the latter demands from the user additional knowledge and steps to create and configure an HPC clusters in the cloud, configure ports forwarding, transmit the user’s data, run the workload, and download the workload results back to the user’s laptop. Those steps usually can be automated, but they are typically either not integrated into a single seamless user workflow, implemented as a proprietary software or vendor locked.
+### Why Sky Port
 
-Sky Port is an open-source vendor-independent workload manager designed for HPC workload. In particular the following funcionality is going to be implemented:
+* **One workflow**: no separate steps to create VMs, forward ports, sync files, and clean up afterward.
+* **You choose the resources**: pick flavors and images (you pay the cloud provider directly).
+* **Replaceable edges** — Terminals and Gates speak documented APIs, so third parties can add user interfaces or cloud backends without forking the core.
+* **Certificate-based trust** — Terminals, Core, and Gates authenticate with mutual TLS (certificates under `~/.swm`), not shared passwords.
 
-* Multi node jobs
-* GPU jobs
-* MPI
-* OpenMP
-* Checkpoints
+## Quick start
 
-## Supported platforms
+Pull the release container (Core + cloud gate):
 
-Sky Port targets support for the Linux operating system. A reasonable effort is made to support all major, modern Linux distributions on ARM64 and X86_64 architectures. However, validation is limited to the most recent releases of Ubuntu/X86_64 systems.
+```bash
+docker pull openworkload/skyport:latest
+```
+
+From a [swm-core](https://github.com/openworkload/swm-core) checkout, bootstrap and start:
+
+```bash
+make start-release-container
+# Configure Azure credentials, then:
+docker start skyport
+```
+
+Azure setup: [AZURE.md](https://github.com/openworkload/swm-cloud-gate/blob/master/HOWTO/AZURE.md). Install and build details: [INSTALL.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/INSTALL.md).
+
+Talk to a running Core with the console terminal:
+
+```bash
+pip install swmconsole
+swmconsole --help
+swmconsole --job-list
+```
+
+## How you use it
+
+1. **Interactive notebooks**: [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term) (`swmjupyter` on PyPI) spawns JupyterLab on cloud VMs through Sky Port.
+2. **Batch / scripted jobs**: write a `#SWM` job script and submit with [swmconsole](https://github.com/openworkload/swm-console-term).
+3. **Custom terminals**: build against the [Python client](https://github.com/openworkload/swm-python-client) (`swmclient` on PyPI) and the Core REST API.
+4. **Your own cloud gate**: implement a Gate for your compute resources (Azure is the reference integration today).
+
+### Job script sketch
+
+```bash
+#!/bin/bash
+#SWM name example-job
+#SWM nodes 1
+#SWM flavor Standard_D4s_v3
+#SWM cloud-image ubuntu-22.04
+#SWM container-image ubuntu:22.04
+#SWM input-files data.dat
+#SWM output-files results.out
+
+./run_my_workload.sh
+```
+
+Directives cover nodes, GPUs, flavors, images, file transfer, and port forwarding. Full reference: [JOB_DIRECTIVES.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOB_DIRECTIVES.md).
 
 ## Current status
 
-The [source code](https://github.com/openworkload) is currently in early (alpha) stage. The project requires some time for API stabilization.
+Sky Port is **alpha**. APIs are still stabilizing.
 
-## Source code
+**Available today**
 
-Sky Port software stack consists of the following repositories:
-* [Core](https://github.com/openworkload/swm-core): the main component of Sky Port (workload manager). This daemon runs in the background and serves all communications among terminals and gates.
-* [Scheduler](https://github.com/openworkload/swm-sched): workload scheduler (a plugin for the core daemon). It creates timetables for job execution.
-* [Gate](https://github.com/openworkload/swm-cloud-gate): a plugin for Sky Port that is in charge of all communications between the Core and cloud providers.
-* [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term): JupyterHub spawner that allows submission of Jupyter servers jobs to Sky Port. 
-* [Console terminal](https://github.com/openworkload/swm-console-term): console program that uses Sky Port python client library to work with Sky Port workload and resources.
-* [Python client library](https://github.com/openworkload/swm-python-client): wrapper around client REST API of the core component.
+* Full cloud job lifecycle (submit, schedule, provision, transfer, run, monitor, tear down).
+* Microsoft Azure as the primary remote site.
+* Multi-node and GPU job directives.
+* Containerized jobs.
+* Console and Jupyter terminals; Python client on PyPI.
+* Release image: `openworkload/skyport:latest`
 
-## Sky Port design
+**Limited / in progress**
 
-The following schema shows relationships among the Sky Port components.
+* MPI integration
+* Validation focused on recent Ubuntu on x86_64 (ARM64 and other distros are best-effort)
 
-![schema](./images/skyport_schema.png)
+**Planned**
 
-The idea of such components separation is the following: APIs of a Core and a Gate are well described. Thus they can be replaced to be more suitable for a user's problem. Terminals can be created by 3rd party software developers for specific user needs, like submission of Jupyter servers jobs. Cloud provider owners can create gates for their compute resources and share them among their users.
+* Accounting
+* Checkpoints
+* Broader cloud-provider coverage and platform validation
 
-Connections between terminal, core, gate and cloud provider is shown on the following schema.
+## Software stack
 
-![schema](./images/connections.png)
+| Component | Repository | Role |
+|-----------|------------|------|
+| Core | [swm-core](https://github.com/openworkload/swm-core) | Workload manager daemon; Terminal ↔ Gate orchestration |
+| Scheduler | [swm-sched](https://github.com/openworkload/swm-sched) | Scheduler plugin; builds execution timetables |
+| Gate | [swm-cloud-gate](https://github.com/openworkload/swm-cloud-gate) | Cloud provider integration (Azure) |
+| Jupyter terminal | [swm-jupyter-term](https://github.com/openworkload/swm-jupyter-term) | JupyterHub spawner for Sky Port jobs |
+| Console terminal | [swm-console-term](https://github.com/openworkload/swm-console-term) | CLI for jobs, flavors, images, and remotes |
+| Python client | [swm-python-client](https://github.com/openworkload/swm-python-client) | Wrapper around the Core REST API |
 
-## Contributing
+## Design
 
-We appreciate all your contributions. If you are planning to contribute back bug fixes, please do so without any further discussion. If you plan to contribute new features, Sky Port improvements, or new gates and terminals, please open an issue and discuss the feature with us.
+Sky Port separates **Terminals** (user-facing clients), **Core** (orchestration), and **Gates** (cloud connector plugins). Clear APIs mean you can swap or extend edges for a specific workflow or provider without rewriting the manager.
 
-We use a shared copyright model that enables all contributors to maintain the copyright on their contributions. All the software we develop is licensed under the BSD-3-Clause license. Our code of conduct can be found [here](https://github.com/openworkload/swm-core/blob/master/CODE_OF_CONDUCT.md).
+![Sky Port components](./images/skyport_schema.png)
+
+Connections between terminal, core, gate, and cloud provider:
+
+![Connections](./images/connections.png)
+
+## Supported platforms
+
+Sky Port targets Linux on ARM64 and x86_64. A reasonable effort is made across major modern distributions, but validation is currently limited to recent Ubuntu on x86_64.
+
+## Docs and contributing
+
+* [Install / Docker](https://github.com/openworkload/swm-core/blob/master/HOWTO/INSTALL.md)
+* [Job directives](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOB_DIRECTIVES.md)
+* [Azure setup](https://github.com/openworkload/swm-cloud-gate/blob/master/HOWTO/AZURE.md)
+* [Build from source](https://github.com/openworkload/swm-core/blob/master/HOWTO/BUILD.md)
+
+Bug fixes are welcome without prior discussion. For new features, gates, or terminals, [open an issue](https://github.com/openworkload/swm-core/issues) first.
+
+Software is licensed under BSD-3-Clause. [Code of conduct](https://github.com/openworkload/swm-core/blob/master/CODE_OF_CONDUCT.md).

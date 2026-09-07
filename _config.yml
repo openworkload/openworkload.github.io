@@ -1,8 +1,8 @@
 repository: openworkload/openworkload.github.io
 url: https://openworkload.github.io
 author: Taras Shapovalov
-title: Open Workload Project
-description: Open community which goal is to develop a new standard for modern distributed computing
+title: Sky Port
+description: Open-source workload manager that connects HPC software to cloud compute - by the Open Workload community
 show_downloads: false
 markdown: kramdown
 remote_theme: pages-themes/cayman@v0.2.0
