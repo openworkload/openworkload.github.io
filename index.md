@@ -87,7 +87,7 @@ Sky Port is **alpha**. APIs are still stabilizing.
 
 Sky Port separates **Terminals** (user-facing clients), **Core** (orchestration), and **Gates** (cloud connector plugins). Clear APIs mean you can swap or extend components for a specific workflow or provider without rewriting the manager.
 
-![Sky Port components](./images/skyport_schema.png)
+<img src="./images/skyport_schema.png" alt="Sky Port components" width="75%"/>
 
 Network connections between terminal, core, gate, and cloud provider:
 
