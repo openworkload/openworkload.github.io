@@ -2,7 +2,7 @@ repository: openworkload/openworkload.github.io
 url: https://openworkload.github.io
 author: Taras Shapovalov
 title: Sky Port
-description: Open-source workload manager that connects HPC software to cloud compute - by the Open Workload community
+description: Open-source workload manager that connects HPC software to cloud compute
 show_downloads: false
 markdown: kramdown
 remote_theme: pages-themes/cayman@v0.2.0
