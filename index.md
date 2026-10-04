@@ -1,43 +1,59 @@
 ## Sky Port
 
-**Sky Port** is an open-source, vendor-independent workload manager for [HPC workload](https://en.wikipedia.org/wiki/High-performance_computing). It connects user software to cloud compute: submit a job, and Sky Port provisions the cluster, configures port forwarding, pulls containers, uploads data, runs containerized job, monitors progress, download result data, and tears resources down when the work is done.
+**Sky Port** gives you **private HPC on demand**.
 
-Open Workload is the community behind Sky Port.
+Submit a job. Sky Port creates a private cloud cluster for that workload, runs your containers, moves data, monitors progress, and removes the resources when the job ends. You do not share a fixed cluster with other users. You get dedicated nodes for the life of the job.
 
-[Quick start](#quick-start) · [Try Jupyter](https://github.com/openworkload/swm-jupyter-term) · [Source on GitHub](https://github.com/openworkload)
+Sky Port is open-source and vendor-independent. It is built for [HPC workloads](https://en.wikipedia.org/wiki/High-performance_computing): multi-node MPI, GPUs, fast interconnects, and checkpoint-friendly runs. Open Workload is the community behind Sky Port.
+
+[Quick start](#quick-start) · [HPC features](#hpc-features) · [Try Jupyter](https://github.com/openworkload/swm-jupyter-term) · [Source on GitHub](https://github.com/openworkload)
 
 ### Why Sky Port
 
+* **Private HPC when you need it**: each job gets its own cloud partition and nodes; resources go away when the job finishes (unless you keep them for debug).
+* **HPC-ready by design**: MPI over PMIx, GPU CDI, InfiniBand/RDMA attach, storage mounts, metrics, and optional checkpointing.
 * **One workflow**: no separate steps to create VMs, forward ports, sync files, and clean up afterward.
 * **You choose the resources**: pick node flavors and images (you pay the cloud provider directly).
 * **Replaceable components**: Terminals (clients) and Gates (cloud connectors) speak documented REST APIs, so third parties can add user interfaces or cloud backends without forking the core.
 * **Certificate-based trust**: Terminals, Core, and Gates authenticate with mutual TLS, not shared passwords.
 
+### HPC features
+
+* **MPI via PMIx**: start multi-node ranks with `swm-task --pmix`; Sky Port runs per-node `swm-pmix` and injects `PMIX_*` / `SWM_*` for MPI apps.
+* **GPU integration**: request GPUs with `#SWM gpus`; NVIDIA devices enter the job container through CDI (hard fail if CDI is missing).
+* **InfiniBand and RDMA**: when the host has IB/RDMA, Sky Port attaches it to job containers automatically (CDI or device nodes, plus memlock caps).
+* **Storage automount**: attach cloud blob storage with `#SWM storage` (for example Azure blob at `/mnt/blob`) for inputs, outputs, and checkpoint images.
+* **Job monitoring**: Porter samples CPU, memory, and GPU (NVML) usage; Sky Port exports Prometheus metrics and a REST job metrics API.
+* **Checkpointing**: optional DMTCP/MANA checkpoints for MPI jobs (`#SWM checkpoint dmtcp`), with cancel-time final images and restart via a new job.
+
+See [JOBS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOBS.md), [CONTAINERS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/CONTAINERS.md), [ACCOUNTING.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/ACCOUNTING.md), and [CHECKPOINTS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/CHECKPOINTS.md).
+
 ## Quick start
 
-Pull the release container with pre-installed Core + Gate:
+Pull the release container (Core + Gate):
 
 ```bash
-docker pull openworkload/skyport:latest
+podman pull openworkload/skyport:latest
 ```
 
-From a [swm-core](https://github.com/openworkload/swm-core) checkout, bootstrap and start:
+From a [swm-core](https://github.com/openworkload/swm-core) checkout, start the Sky Port pod:
 
 ```bash
-docker start skyport
+make start-release-container
+# later: podman pod start skyport-pod
 ```
 
 Talk to a running Core with the console terminal:
 
 ```bash
 pip install swmconsole
-swm-console --help
-swm-console --job-list
+swmconsole --help
+swmconsole --job-list
 ```
 
 ## How you use it
 
-1. **Interactive Jupyter notebooks**: [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term) (`swmjupyter` on PyPI) spawns JupyterLab on cloud VMs through Sky Port.
+1. **Interactive Jupyter notebooks**: [Jupyter terminal](https://github.com/openworkload/swm-jupyter-term) (`swmjupyter` on PyPI) spawns JupyterLab on private cloud VMs through Sky Port.
 2. **Batch / scripted jobs**: write a `#SWM` job script and submit with [swm-console](https://github.com/openworkload/swm-console-term).
 3. **Custom terminals**: build against the [Python client](https://github.com/openworkload/swm-python-client) (`swmclient` on PyPI) and the Core REST API.
 4. **Your own cloud gate**: implement a Gate for your compute resources (Azure is the reference integration today).
@@ -46,18 +62,21 @@ swm-console --job-list
 
 ```bash
 #!/bin/bash
-#SWM name example-job
+#SWM name example-mpi-job
 #SWM nodes 3
-#SWM flavor Standard_D2_v4
-#SWM cloud-image ubuntu-22.04
-#SWM container-image ubuntu:22.04
+#SWM gpus 1
+#SWM flavor Standard_NC6s_v3
+#SWM cloud-image ubuntu-hpc/2404
+#SWM container-image ubuntu:24.04
+#SWM storage swmblobcontainer
 #SWM input-files data.dat
 #SWM output-files results.out
 
-./run_my_workload.sh
+export PATH="/opt/openmpi/bin:${PATH}"
+swm-task --pmix ./run_my_mpi_app
 ```
 
-Directives cover nodes, GPUs, flavors, images, file transfer, and port forwarding. Full reference: [JOB_DIRECTIVES.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOB_DIRECTIVES.md).
+Directives cover nodes, GPUs, flavors, images, storage, file transfer, ports, and checkpointing. Full reference: [JOBS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOBS.md).
 
 ## Current status
 
@@ -65,10 +84,12 @@ Sky Port is **alpha**. APIs are still stabilizing.
 
 **Available today**
 
-* Full cloud job lifecycle (submit, schedule, provision, transfer, run, monitor, tear down).
+* Private on-demand clusters for the full job lifecycle (submit, schedule, provision, transfer, run, monitor, tear down).
 * Microsoft Azure as the remote site.
-* Multi-node and GPU job directives.
-* Containerized jobs.
+* Multi-node MPI via PMIx (`swm-task --pmix`).
+* GPU jobs (NVIDIA CDI), InfiniBand/RDMA attach, and storage automount.
+* Job resource metrics (Prometheus + REST) and optional DMTCP/MANA checkpointing.
+* Containerized jobs (rootless Podman).
 * Console and Jupyter terminals.
 * Python client library.
 
@@ -95,10 +116,13 @@ Sky Port targets Linux on ARM64 and x86_64. A reasonable effort is made across m
 
 ## Docs and contributing
 
-* [Install / Docker](https://github.com/openworkload/swm-core/blob/master/HOWTO/INSTALL.md)
+* [Install](https://github.com/openworkload/swm-core/blob/master/HOWTO/INSTALL.md)
+* [Containers (Podman, GPU, IB/RDMA)](https://github.com/openworkload/swm-core/blob/master/HOWTO/CONTAINERS.md)
+* [Job scripts (MPI, storage, GPUs)](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOBS.md)
+* [Job metrics](https://github.com/openworkload/swm-core/blob/master/HOWTO/ACCOUNTING.md)
+* [Checkpointing (DMTCP/MANA)](https://github.com/openworkload/swm-core/blob/master/HOWTO/CHECKPOINTS.md)
 * [Azure setup](https://github.com/openworkload/swm-cloud-gate/blob/master/HOWTO/AZURE.md)
 * [Build from source](https://github.com/openworkload/swm-core/blob/master/HOWTO/BUILD.md)
-* [Job directives](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOB_DIRECTIVES.md)
 
 Bug fixes are welcome without prior discussion. For new features, gates, or terminals, [open an issue](https://github.com/openworkload/swm-core/issues) first.
 
