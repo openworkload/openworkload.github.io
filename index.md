@@ -1,10 +1,10 @@
 ## Sky Port
 
-**Sky Port** gives you **private HPC on demand**.
+**Sky Port** gives you **private HPC on demand**. You own the workload management.
 
 Submit a job. Sky Port creates a private cloud cluster for that workload, runs your containers, moves data, monitors progress, and removes the resources when the job ends. You do not share a fixed cluster with other users. You get dedicated nodes for the life of the job.
 
-Sky Port is open-source and vendor-independent. It is built for [HPC workloads](https://en.wikipedia.org/wiki/High-performance_computing): multi-node MPI, GPUs, fast interconnects, and checkpoint-friendly runs. Open Workload is the community behind Sky Port.
+Sky Port is open-source (BSD-3-Clause) and vendor-independent. It is built for [HPC workloads](https://en.wikipedia.org/wiki/High-performance_computing): multi-node MPI, GPUs, fast interconnects, and checkpoint-friendly runs. Open Workload is the community behind Sky Port.
 
 [Quick start](#quick-start) · [HPC features](#hpc-features) · [Try Jupyter](https://github.com/openworkload/swm-jupyter-term) · [Source on GitHub](https://github.com/openworkload)
 
@@ -13,18 +13,18 @@ Sky Port is open-source and vendor-independent. It is built for [HPC workloads](
 * **Private HPC when you need it**: each job gets its own cloud partition and nodes; resources go away when the job finishes (unless you keep them for debug).
 * **HPC-ready by design**: MPI over PMIx, GPU CDI, InfiniBand/RDMA attach, storage mounts, metrics, and optional checkpointing.
 * **One workflow**: no separate steps to create VMs, forward ports, sync files, and clean up afterward.
-* **You choose the resources**: pick node flavors and images (you pay the cloud provider directly).
+* **You choose the resources**: pick container image, node flavors and compute node images (you pay the cloud provider directly).
 * **Replaceable components**: Terminals (clients) and Gates (cloud connectors) speak documented REST APIs, so third parties can add user interfaces or cloud backends without forking the core.
 * **Certificate-based trust**: Terminals, Core, and Gates authenticate with mutual TLS, not shared passwords.
 
 ### HPC features
 
-* **MPI via PMIx**: start multi-node ranks with `swm-task --pmix`; Sky Port runs per-node `swm-pmix` and injects `PMIX_*` / `SWM_*` for MPI apps.
-* **GPU integration**: request GPUs with `#SWM gpus`; NVIDIA devices enter the job container through CDI (hard fail if CDI is missing).
+* **MPI via PMIx**: start multi-node ranks with `swm-task --pmix`. Sky Port runs per-node `swm-pmix` and injects `PMIX_*` / `SWM_*` for MPI apps.
+* **GPU integration**: request GPUs with `#SWM gpus`. NVIDIA devices enter the job container through CDI (hard fail if CDI is missing).
 * **InfiniBand and RDMA**: when the host has IB/RDMA, Sky Port attaches it to job containers automatically (CDI or device nodes, plus memlock caps).
-* **Storage automount**: attach cloud blob storage with `#SWM storage` (for example Azure blob at `/mnt/blob`) for inputs, outputs, and checkpoint images.
+* **Storage automount**: attach cloud blob storage with `#SWM storage` directive for inputs, outputs, scratch filesystem and checkpointing.
 * **Job monitoring**: Porter samples CPU, memory, and GPU (NVML) usage; Sky Port exports Prometheus metrics and a REST job metrics API.
-* **Checkpointing**: optional DMTCP/MANA checkpoints for MPI jobs (`#SWM checkpoint dmtcp`), with cancel-time final images and restart via a new job.
+* **Checkpointing**: optional DMTCP/MANA checkpoints for MPI jobs (`#SWM checkpoint dmtcp`).
 
 See [JOBS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOBS.md), [CONTAINERS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/CONTAINERS.md), [ACCOUNTING.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/ACCOUNTING.md), and [CHECKPOINTS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/CHECKPOINTS.md).
 
@@ -78,27 +78,12 @@ swm-task --pmix ./run_my_mpi_app
 
 Directives cover nodes, GPUs, flavors, images, storage, file transfer, ports, and checkpointing. Full reference: [JOBS.md](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOBS.md).
 
-## Current status
-
-Sky Port is **alpha**. APIs are still stabilizing.
-
-**Available today**
-
-* Private on-demand clusters for the full job lifecycle (submit, schedule, provision, transfer, run, monitor, tear down).
-* Microsoft Azure as the remote site.
-* Multi-node MPI via PMIx (`swm-task --pmix`).
-* GPU jobs (NVIDIA CDI), InfiniBand/RDMA attach, and storage automount.
-* Job resource metrics (Prometheus + REST) and optional DMTCP/MANA checkpointing.
-* Containerized jobs (rootless Podman).
-* Console and Jupyter terminals.
-* Python client library.
-
 ## Software stack
 
 | Component | Repository | Role |
 |-----------|------------|------|
-| Core | [swm-core](https://github.com/openworkload/swm-core) | Workload manager daemon; Terminal ↔ Gate orchestration |
-| Scheduler | [swm-sched](https://github.com/openworkload/swm-sched) | Scheduler plugin; builds execution timetables |
+| Core | [swm-core](https://github.com/openworkload/swm-core) | Workload manager daemon: Terminal ↔ Gate orchestration |
+| Scheduler | [swm-sched](https://github.com/openworkload/swm-sched) | Scheduler plugin: builds execution timetables |
 | Gate | [swm-cloud-gate](https://github.com/openworkload/swm-cloud-gate) | Cloud provider integration (Azure) |
 | Jupyter terminal | [swm-jupyter-term](https://github.com/openworkload/swm-jupyter-term) | JupyterHub spawner for Sky Port jobs |
 | Console terminal | [swm-console-term](https://github.com/openworkload/swm-console-term) | CLI for jobs, flavors, images, and remotes |
