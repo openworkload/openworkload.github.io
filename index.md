@@ -102,6 +102,7 @@ Sky Port targets Linux on ARM64 and x86_64. A reasonable effort is made across m
 ## Docs and contributing
 
 * [Install](https://github.com/openworkload/swm-core/blob/master/HOWTO/INSTALL.md)
+* [Security (CA, mTLS, SSH/SFTP)](https://github.com/openworkload/swm-core/blob/master/HOWTO/SECURITY.md)
 * [Containers (Podman, GPU, IB/RDMA)](https://github.com/openworkload/swm-core/blob/master/HOWTO/CONTAINERS.md)
 * [Job scripts (MPI, storage, GPUs)](https://github.com/openworkload/swm-core/blob/master/HOWTO/JOBS.md)
 * [Job metrics](https://github.com/openworkload/swm-core/blob/master/HOWTO/ACCOUNTING.md)
